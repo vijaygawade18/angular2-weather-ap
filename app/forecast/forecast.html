@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-md-4">
+        <h3>Weather forecast for {{forecast?.city.name}}, {{forecast?.city.country}}</h3>
+        <table class="table">
+            <tbody>
+            <tr *ngFor="let weather of forecast?.list">
+                <td>
+                    {{getTime(weather.dt) | date:'dd-MMM'}}
+                    <img src="http://openweathermap.org/img/w/{{weather.weather[0].icon}}.png">
+                </td>
+                <td>
+                <td>
+                    <span class="label label-warning">{{weather.temp.max - 273.15 | number}}°C </span>&nbsp;
+                    <span class="label label-default">{{weather.temp.min - 273.15 | number}}°C </span> &nbsp;&nbsp;
+                    <i>{{weather.weather[0].description}}</i>
+                    <p>
+                        {{weather.speed}}m/s <br>
+                        clouds: {{weather.clouds}}%, {{weather.pressure}} hpa
+                    </p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-8">
+        <high-chart [options]="opts"></high-chart>
+        <button (click)="updates($event)">UPDATES</button>
+    </div>
+</div>
+<div class="row marBtm20 " *ngIf="forecast">
+    <div class="col-md-12">
+        <a href="#/search" class="btn-sm btn-info">Back to Search</a>
+        <a href="/weather/{{forecast?.city.id}}" class="btn-sm btn-info">Back to Details</a>
+    </div>
+</div>

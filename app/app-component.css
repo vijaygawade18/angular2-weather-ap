@@ -1,0 +1,15 @@
+nav .navbar-header {
+    padding: 12px 0;
+}
+nav .navbar-header .navabar-brand {
+    text-decoration: none;
+    color: #999999;
+    font-size: 18px;
+    font-family: arial;
+}
+.marTop20{
+    margin-top: 20px;
+}
+.marBtm20{
+    margin-bottom: 20px;
+}

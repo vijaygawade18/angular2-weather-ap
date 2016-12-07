@@ -1,0 +1,37 @@
+<div class="search-form">
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="searchInput" [(ngModel)]="searchStr"  [ngModelOptions]="{standalone: true}">
+                        <button class="btn btn-info" (click)="onSearch(searchStr)">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row marTop20">
+        <div class="col-md-12 col-lg-8">
+            <table class="table">
+                <tbody>
+                    <tr *ngFor="let city of cities">
+                        <td>
+                            <img src="http://openweathermap.org/img/w/{{city.weather[0].icon}}.png" alt="">
+                        </td>
+                        <td>
+                            <b><a href="weather/{{city.id}}">{{city.name}}, {{city.sys.country}}</a></b>
+                            <img src="http://openweathermap.org/images/flags/{{city.sys.country.toLowerCase()}}.png" title="{{city.sys.country}}">
+                            <b><i>{{city.weather[0].description}}</i></b>
+                            <p class="marBtm10">
+                                <span class="badge badge-info">{{city.main.temp - 273.15 | number}}°С </span>
+                                temperature from {{city.main.temp_min - 273.15 | number}} to {{city.main.temp_max - 273.15 | number}}°С, wind {{city.wind.speed}}m/s. clouds {{city.clouds.all}}%, {{city.main.pressure}} hpa
+                            </p>
+                            <p>Geo coords  <a href="weather/{{city.id}}">[{{city.coord.lat}}, {{city.coord.lon}} ]</a></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
