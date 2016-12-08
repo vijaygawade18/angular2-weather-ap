@@ -33,7 +33,7 @@ export class WeatherService {
             .catch(this._errorHandler);
     }
 
-    getForecast (id:string){
+    getForecast (id:number){
         let forecastUrl = this.forecastWeatherUrl+ id + '&appId=' + this.config.params.apiKey;
         return this.http.get(forecastUrl)
             .map((response: Response)=> response.json())

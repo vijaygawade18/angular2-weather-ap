@@ -36,7 +36,7 @@ export class ForecastComponent implements OnInit{
         }
     }
 
-    getForecast(id:string){
+    getForecast(id:number){
         this._forecastService.getForecast(id)
             .subscribe(response => this.forecast = response,
                 resError => this.errorMsg = resError);
