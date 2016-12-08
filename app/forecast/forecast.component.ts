@@ -11,6 +11,8 @@ import 'rxjs/add/operator/switchMap';
 
 export class ForecastComponent implements OnInit{
     public forecast:string[];
+    errorMsg:string;
+
     opts: any;
     constructor(
         private _route: ActivatedRoute,
@@ -35,9 +37,9 @@ export class ForecastComponent implements OnInit{
     }
 
     getForecast(id:string){
-        this._forecastService.getForecast(id).then(response =>{
-            this.forecast = response;
-        })
+        this._forecastService.getForecast(id)
+            .subscribe(response => this.forecast = response,
+                resError => this.errorMsg = resError);
     }
 
     getTime(dt:number){

@@ -11,13 +11,12 @@ import {WeatherService} from "../weather/weather.svc";
 
 export class SearchComponent{
     public cities: string[];
+    errorMsg: string;
     constructor(public _weatherService:WeatherService){
     }
     onSearch(searchStr: string){
-        //this.searchString.emit(searchStr);
-
-        this._weatherService.findByLocation(searchStr).then(response =>{
-            this.cities = response['list'];
-        });
+        this._weatherService.findByLocation(searchStr)
+            .subscribe(response => this.cities = response['list'],
+                        resError => this.errorMsg = resError);
     }
 }

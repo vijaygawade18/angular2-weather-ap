@@ -1,7 +1,8 @@
 import { Injectable }     from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable }     from 'rxjs/Observable';
-import 'rxjs/Rx';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class WeatherService {
@@ -11,51 +12,37 @@ export class WeatherService {
             apiKey: "1f70360a624b51d457b80b80029aaef5"
         }
     };
+
+    locationUrl: string = "http://api.openweathermap.org/data/2.5/find?q=";
+    currentWeatherUrl: string =  'http://api.openweathermap.org/data/2.5/weather?id=';
+    forecastWeatherUrl: string =  'http://api.openweathermap.org/data/2.5/forecast/daily?id=';
+
     constructor (private http: Http) {}
 
-    findByLocation (searchStr:string): Promise<any[]> {
-        let locationUrl =  "http://api.openweathermap.org/data/2.5/find?q="+searchStr;
-        let apiUrl = locationUrl+'&appId=1f70360a624b51d457b80b80029aaef5';
+    findByLocation (searchStr:string) {
+        let apiUrl = this.locationUrl  + searchStr + '&appId=' + this.config.params.apiKey;
         return this.http.get(apiUrl)
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+            .map((response: Response)=> response.json())
+            .catch(this._errorHandler);
     }
 
-    getCurrentWeather (id:string): Promise<any[]> {
-        let currentWeatherUrl =  'http://api.openweathermap.org/data/2.5/weather?id='+id;
-        let apiUrl = currentWeatherUrl+'&appId=1f70360a624b51d457b80b80029aaef5';
-        return this.http.get(apiUrl)
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+    getCurrentWeather (id:string){
+        let currentUrl = this.currentWeatherUrl + id + '&appId=' + this.config.params.apiKey;
+        return this.http.get(currentUrl)
+            .map((response: Response)=> response.json())
+            .catch(this._errorHandler);
     }
 
-    getForecast (id:string): Promise<any[]> {
-        let forecastWeatherUrl =  'http://api.openweathermap.org/data/2.5/forecast/daily?id='+id;
-        let apiUrl = forecastWeatherUrl+'&appId=1f70360a624b51d457b80b80029aaef5';
-        return this.http.get(apiUrl)
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+    getForecast (id:string){
+        let forecastUrl = this.forecastWeatherUrl+ id + '&appId=' + this.config.params.apiKey;
+        return this.http.get(forecastUrl)
+            .map((response: Response)=> response.json())
+            .catch(this._errorHandler);
     }
 
-
-    private extractData(res: Response) {
-        let body = res.json();
-        return body || {};
-    }
-    private handleError (error: Response | any) {
-        // In a real world app, we might use a remote logging infrastructure
-        let errMsg: string;
-        if (error instanceof Response) {
-            const body = error.json() || '';
-            const err = body.error || JSON.stringify(body);
-            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-        } else {
-            errMsg = error.message ? error.message : error.toString();
-        }
-        console.error(errMsg);
-        return Observable.throw(errMsg);
+    // error handler method
+    _errorHandler(error: Response){
+        console.error(error);
+        return Observable.throw(error || "Server error")
     }
 }

@@ -11,7 +11,8 @@ import 'rxjs/add/operator/switchMap';
 
 export class WeatherComponent implements OnInit{
     public current: string[];
-
+    errorMsg:string;
+    
     constructor(
         private _route: ActivatedRoute,
         private _currentWeather:WeatherService
@@ -23,9 +24,9 @@ export class WeatherComponent implements OnInit{
         }
     }
     getCurrent(id:string){
-        this._currentWeather.getCurrentWeather(id).then(response =>{
-            this.current = response;
-        });
+        this._currentWeather.getCurrentWeather(id)
+            .subscribe(response => this.current = response,
+                resError => this.errorMsg = resError);
     }
 
     getTime(dt:number){
